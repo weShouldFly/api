@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html >
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script type="text/javascript" src="js/jquery-3.2.1.js" ></script>
+<style>
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	body,html{
+		width: 100%;
+		height: 100%;
+	}
+	
+    .xs{
+    	display: block;
+    }
+    .yc{
+    	display: none;
+    }
+	.content{
+		border-bottom: 1px dashed pink;
+		margin-bottom: 10px;
+	}
+	.content h2{
+		color: pink;
+		text-shadow: 3px 1px 1px ;
+		height: 10%;
+	}
+	.content .title{
+		height: 10%;
+		line-height: 200%;
+	}
+	.content .imgBox{
+		width: 100%;
+		display: flex;
+		height: 78%;
+		/*overflow: hidden;*/
+	}
+	.content .imgBox img{
+		flex: 1;
+		width: 33%;
+		height: 100%;
+	}
+	/*.content*/
+</style>
+</script>
+ 
+</head>
+<body>
+<!--<div id="content1">
+	<h2 id="h2"></h2>
+    <p id="title"></p>
+	<img  src="" alt="" id="topImg" />
+	<img src="" alt=""  id="textImg1"/>
+	<img src="" alt=""  id="textImg2"/>
+</div>
+<div id="content2">
+	<h2 id="h2"></h2>
+    <p id="title"></p>
+	<img  src=""  id="topImg" />
+
+</div>-->
+
+</body>
+<script>
+	var a=0;
+   function myAjax(x){
+   	    
+   	    $.ajax({
+			url:'http://api.dagoogle.cn/news/get-news?tableNum='+x+'&pagesize=100',
+			data:"get",
+			dataType:"jsonp",
+			 success:function(data){
+                console.log(data);
+				var data = data.data;
+				
+				for(var i=0;i<=9;i++){
+					
+					$("body").append($("<div id=content"+(i+a)+" class=content>"+
+							"<h2 id='h2'></h2>"+
+					        "<p class='title' id='title'></p>"+
+				     	    "<p class='imgBox'></p>"+
+	    					"</div>"));
+						
+//						console.log($("#imgBox"));
+					if(x!=6){
+						$("#content"+(i+a)+" .imgBox").append(
+						    "<img  src=''  id='topImg' />"+
+						    "<img src=''   id='textImg1'/>"+
+						    "<img src=''   id='textImg2'/>"
+					    );
+					    console.log(i+a);
+					    $("#content"+(i+a)+" #textImg1").attr("src",data[i+a].text_image0);
+					    
+						if(data[i+a].text_image0==""&&data[i+a].text_image1==""){
+							$("#content"+(i+a)+" .imgBox img").eq(0).siblings().addClass("yc");
+					    };
+					    if(data[i].text_image1==""){
+							$("#content"+(i+a)+" .imgBox img").eq(0).siblings().addClass("yc");
+					    };
+					    $("#content"+(i+a)+" #title").html(data[(i+a)].title);
+					}else{
+						$("#content"+(i+a)+"").append("<p id='laugh'></p>");
+						$("#content"+(i+a)+" #laugh").html(data[i+a].digest);
+					}
+					
+	                $("#content"+(i+a)+" #h2").html(data[(i+a)].source);
+					$("#content"+(i+a)+" #topImg").attr("src",data[(i+a)].top_image);
+					
+                    if(x!=3){
+                    	$("#content"+(i+a)+" #textImg2").attr("src",data[(i+a)].text_image1);
+					}else{
+						$("#content"+(i+a)+" .imgBox img").eq(2).addClass("yc");
+					}
+				};
+				var num=$(".content").length;
+//			    console.log($(".content").length);
+			    $(".content").attr("height",100/num+"%");
+			    a=a+10;
+			 },
+			 error:function(data){
+			 	alert("链接不存在")
+			 }
+		 }).always(function(data){
+		
+		})
+		
+   }
+   
+   myAjax(8);
+   console.log(a);
+
+   
+// console.log(a);
+   
+  
+//$("#content0 .imgBox img").addClass("yc");
+//  function ()
+ </script>
+
+</html>
